@@ -1,49 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valentine Surprise 💖</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Preeti, I Have a Question...</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-grad: linear-gradient(45deg, #ff0055, #ff5858, #ad1de7);
+            --glow: 0 0 20px rgba(255, 20, 147, 0.8);
+        }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@700&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  <link rel="stylesheet" href="style.css">
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 50%, #ee9ae2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Floating Hearts Background */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .container {
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: var(--glow);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            animation: pulse 1.5s infinite ease-in-out;
+            line-height: 1.1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); text-shadow: var(--glow); }
+            50% { transform: scale(1.05); text-shadow: 0 0 40px #ff0055; }
+        }
+
+        /* Buttons */
+        .btn-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        #yesBtn {
+            background: var(--primary-grad);
+            color: white;
+            z-index: 100;
+        }
+
+        #noBtn {
+            background: #fff;
+            color: #ff0055;
+            position: absolute;
+            transition: all 0.2s ease;
+            z-index: 99;
+        }
+
+        /* Success Screen */
+        #success {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gif-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            width: 90%;
+        }
+
+        .gif-grid img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            animation: float 5s infinite linear;
+            opacity: 0.8;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Floating hearts -->
-  <div class="hearts"></div>
+    <div class="bg-elements" id="bg"></div>
 
-  <!-- Main Container -->
-  <div class="container" id="questionBox">
-    <h1 class="question">
-      RANJANA,<br>
-      WILL YOU BE MY<br>
-      VALENTINE? 💘
-    </h1>
-
-    <div class="buttons">
-      <button id="yesBtn">YES 💖</button>
-      <button id="noBtn">NO 😏</button>
+    <div class="container" id="mainContent">
+        <h1>PREETI,<br>WILL YOU BE MY VALENTINE?</h1>
+        
+        <div class="btn-wrap">
+            <button class="btn" id="yesBtn" onclick="celebrate()">YES!</button>
+            <button class="btn" id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">NO</button>
+        </div>
     </div>
-  </div>
 
-  <!-- Celebration -->
-  <div class="celebration hidden" id="celebration">
-    <h1 class="successText">I KNEW YOU LOVE ME 💞🔥</h1>
-
-    <div class="gif-wall">
-      <img src="https://media.tenor.com/4SS4bVt6lWQAAAAC/couple-hug.gif">
-      <img src="https://media.tenor.com/3kK8jK3H7jEAAAAC/love-dance.gif">
-      <img src="https://media.tenor.com/4Xxk8C9nZ6kAAAAC/proposal-love.gif">
-      <img src="https://media.tenor.com/w8ZP2v2Yp8EAAAAC/cute-love.gif">
+    <div class="container" id="success">
+        <h1 style="font-size: 2.5rem;">I KNEW YOU LOVE ME! ❤️</h1>
+        <div class="gif-grid">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTfuxV6ZlY8o6A/giphy.gif" alt="Dance">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/26BRv0ThflsHCqfJA/giphy.gif" alt="Love">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKoWXlo3M1nCdtK/giphy.gif" alt="Hug">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l2R01m5E9PqO5789G/giphy.gif" alt="Celebrate">
+        </div>
     </div>
-  </div>
 
-  <!-- Fireworks Canvas -->
-  <canvas id="fireworks"></canvas>
+    <script>
+        // Create Floating Background Hearts
+        const bg = document.getElementById('bg');
+        const hearts = ['💖', '💘', '💝', '💕', '💞', '💓', '✨'];
+        
+        function createHeart() {
+            const h = document.createElement('div');
+            h.classList.add('particle');
+            h.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            h.style.duration = (Math.random() * 3 + 2) + 's';
+            bg.appendChild(h);
+            setTimeout(() => h.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
 
-  <script src="script.js"></script>
+        // Interactive "NO" Button logic
+        const noBtn = document.getElementById('noBtn');
+        function moveNo() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        }
+
+        // Celebration Logic
+        function celebrate() {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('success').style.display = 'flex';
+            
+            // Firecracker/Confetti Burst
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) return clearInterval(interval);
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            }, 250);
+
+            // Additional Heart Rain
+            setInterval(() => {
+                confetti({
+                    particleCount: 2,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff0000', '#ff69b4']
+                });
+                confetti({
+                    particleCount: 2,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff0000', '#ff69b4']
+                });
+            }, 50);
+        }
+    </script>
 </body>
 </html>
