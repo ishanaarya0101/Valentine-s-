@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #ff4ecd, #ff1744, #7b2ff7);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Floating hearts */
+.hearts::before {
+  content: "❤ 💖 💘 💝 💕 💞 💓";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  animation: float 20s linear infinite;
+  opacity: 0.25;
+  font-size: 3rem;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-100vh); }
+}
+
+/* Container */
+.container {
+  text-align: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.question {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.4rem;
+  color: white;
+  text-shadow: 0 0 15px #ffb3ff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Buttons */
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+button {
+  padding: 14px 28px;
+  font-size: 1.2rem;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#yesBtn {
+  background: linear-gradient(45deg, #ff0066, #ff66cc);
+  color: white;
+  box-shadow: 0 0 20px #ff66cc;
+}
+
+#yesBtn:hover {
+  transform: scale(1.15);
+}
+
+#noBtn {
+  background: #222;
+  color: white;
+  position: relative;
+}
+
+/* Celebration */
+.hidden {
+  display: none;
+}
+
+.celebration {
+  text-align: center;
+  z-index: 20;
+}
+
+.successText {
+  font-size: 2.6rem;
+  color: #fff;
+  text-shadow: 0 0 25px #ff66cc;
+  animation: zoomIn 1s ease forwards;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.gif-wall {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.gif-wall img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 0 15px pink;
+}
